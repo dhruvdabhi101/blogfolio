@@ -1,50 +1,63 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
+import Project from '../components/Project.astro'
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import projectData from '../data/projects.json'
+import '@fontsource/iosevka';
+
+const posts = await getCollection('blog');
+
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="dark">
+    <div class={"w-full flex flex-row justify-center text-[14px] md:text-[15px] font-light"}>
+      <div class='flex flex-col justify-center p-5 w-[100%] sm:w-[97%] md:w-[70%] lg:w-[55%] xl:w-[50%]'>
+
+        <div class='text-neutral-500 flex justify-between tracking-wide'>
+          dhruv
+        </div>
+
+        <div class='flex flex-col gap-6 leading-8 mt-7'>
+          <div >
+            <div class='text-neutral-400 text-xs tracking-wide'>IPA /dhru-v/ — firm/also a star ;)</div>
+            <div class='text-neutral-300'>yo, i'm 20 y/o <span class='font-medium'>software engineer</span> based in India, going to uni, studying cs and playing ukulele on the side.
+              i love learning new languages, how computer works.</div>
+          </div>
+          <div class='text-neutral-300'>right now, i'm trying to learn assembly and c. i use <span class='font-medium'>vim </span>btw.</div>
+        </div>
+
+        <div class='text-neutral-300 mt-16'>
+          <div class='font-bold text-lg'> projects </div>
+          <div class='grid grid-cols-2 md:grid-cols-3 gap-5'>
+            {projectData.projects.map((project, index) => (
+              <Project key={index} title={project.title} description={project.description} link={project.link} />
+              ))
+            }
+          </div>
+        </div>
+        <div class='text-neutral-200 mt-8 mb-6 tracking-wide'>
+          <div class='font-bold text-lg'> blogs </div>
+          <div class='flex flex-col gap-5 mt-5'>
+            {posts.map((post: any) => (
+              <a href={`/blog/${post.slug}`}>
+                <div class='flex flex-row justify-between'>
+                  <div class=' text-neutral-300 underline'>{post.data.title}</div>
+                  <div class='text-neutral-400'>{post.data.pubDate.toDateString()}</div>
+                </div>
+              </a>
+            ))}
+            <a href={`/blog`} class='underline text-neutral-300 '> all blogs &rarr;</a>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    </div>
+  </body>
 </html>

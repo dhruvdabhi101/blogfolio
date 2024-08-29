@@ -1,111 +1,44 @@
 ---
 import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+let posts: any[] = [];
+try {
+  const allPosts: any[] = await getCollection('blog');
+  console.log(allPosts);
+  posts = allPosts
+    .filter(post => post.data.title && post.data.pubDate && post.slug)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+} catch (error) {
+  console.error('Error fetching blog posts:', error);
+}
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.slug}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="dark">
+    <div class={"w-full flex flex-row justify-center text-[13px] md:text-[15px]"}>
+      <div class='flex flex-col justify-center p-5 w-[100%] sm:w-[97%] md:w-[70%] lg:w-[55%] xl:w-[50%] leading-8'>
+        <a href="/"><div class='text-neutral-200 underline'>&larr; back</div></a>
+        <div class='w-full self-center'>
+          <a href="/blog"><div class='font-bold text-lg text-gray-300 '> blogs </div></a>
+          <div class='flex flex-col gap-5 mt-5 tracking-wide'></div>
+            {posts.map((post) => (
+              <a href={`/blog/${post.slug}`}>
+                <div class='flex flex-row justify-between'>
+                  <div class=' text-neutral-300 underline'>{post.data.title}</div>
+                  <div class='text-neutral-400'>{post.data.pubDate.toDateString()}</div>
+                </div>
+              </a>
+            ))}
+            </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
