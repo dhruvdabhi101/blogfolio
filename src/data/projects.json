@@ -2,8 +2,8 @@
   "projects": [
     {
       "title": "rusty-leaf",
-      "description": "command line based static site generator tool based on darkdown",
-      "link": "https://github.com/dhruvdabhi101/rusty-leaf"
+      "description": "command line/web-app based static site generator tool based on darkdown",
+      "link": "https://rusty-leaf.vercel.app"
     },
     {
       "title": "getthatdoc",
