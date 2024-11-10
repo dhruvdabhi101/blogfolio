@@ -10,7 +10,7 @@
 
 @layer {
     body {
-        @apply selection:bg-white selection:bg-opacity-20 selection:text-gray-50 scroll-smooth bg-neutral-900;
+        @apply selection:bg-gray-400 selection:bg-opacity-20 selection:text-yellow-300 scroll-smooth bg-neutral-900;
     }
 }
 
